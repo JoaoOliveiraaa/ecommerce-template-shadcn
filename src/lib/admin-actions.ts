@@ -1,86 +1,143 @@
 "use server"
 
 import { revalidatePath } from "next/cache"
-
-// In a real application, these functions would interact with a database
-// This is a simplified version for demonstration purposes
+import prisma from "./prisma"
 
 // Save product (create or update)
 export async function saveProduct(productData: any): Promise<void> {
-  // In a real app, this would save to a database
-  console.log("Saving product:", productData)
+  try {
+    const { id, ...data } = productData
 
-  // Simulate a delay to mimic database operation
-  await new Promise((resolve) => setTimeout(resolve, 1000))
+    // Converter arrays e objetos para strings JSON para armazenamento
+    const productToSave = {
+      ...data,
+      images: JSON.stringify(data.images),
+      colors: JSON.stringify(data.colors),
+      sizes: JSON.stringify(data.sizes),
+    }
 
-  // Revalidate the products page to reflect changes
-  revalidatePath("/admin/products")
-  revalidatePath("/shop")
-  revalidatePath("/product/[id]")
+    if (id) {
+      // Atualizar produto existente
+      await prisma.product.update({
+        where: { id },
+        data: productToSave,
+      })
+    } else {
+      // Criar novo produto
+      await prisma.product.create({
+        data: productToSave,
+      })
+    }
+
+    // Revalidar páginas para refletir mudanças
+    revalidatePath("/admin/products")
+    revalidatePath("/shop")
+    revalidatePath("/product/[id]")
+  } catch (error) {
+    console.error("Error saving product:", error)
+    throw new Error("Failed to save product")
+  }
 }
 
 // Delete product
 export async function deleteProduct(id: string): Promise<void> {
-  // In a real app, this would delete from a database
-  console.log("Deleting product:", id)
+  try {
+    await prisma.product.delete({
+      where: { id },
+    })
 
-  // Simulate a delay to mimic database operation
-  await new Promise((resolve) => setTimeout(resolve, 1000))
-
-  // Revalidate the products page to reflect changes
-  revalidatePath("/admin/products")
-  revalidatePath("/shop")
+    // Revalidar páginas para refletir mudanças
+    revalidatePath("/admin/products")
+    revalidatePath("/shop")
+  } catch (error) {
+    console.error(`Error deleting product ${id}:`, error)
+    throw new Error("Failed to delete product")
+  }
 }
 
 // Save category (create or update)
 export async function saveCategory(categoryData: any): Promise<void> {
-  // In a real app, this would save to a database
-  console.log("Saving category:", categoryData)
+  try {
+    const { id, ...data } = categoryData
 
-  // Simulate a delay to mimic database operation
-  await new Promise((resolve) => setTimeout(resolve, 1000))
+    if (id) {
+      // Atualizar categoria existente
+      await prisma.category.update({
+        where: { id },
+        data,
+      })
+    } else {
+      // Criar nova categoria
+      await prisma.category.create({
+        data,
+      })
+    }
 
-  // Revalidate the categories page to reflect changes
-  revalidatePath("/admin/categories")
-  revalidatePath("/categories")
+    // Revalidar páginas para refletir mudanças
+    revalidatePath("/admin/categories")
+    revalidatePath("/categories")
+  } catch (error) {
+    console.error("Error saving category:", error)
+    throw new Error("Failed to save category")
+  }
 }
 
 // Delete category
 export async function deleteCategory(id: string): Promise<void> {
-  // In a real app, this would delete from a database
-  console.log("Deleting category:", id)
+  try {
+    await prisma.category.delete({
+      where: { id },
+    })
 
-  // Simulate a delay to mimic database operation
-  await new Promise((resolve) => setTimeout(resolve, 1000))
-
-  // Revalidate the categories page to reflect changes
-  revalidatePath("/admin/categories")
-  revalidatePath("/categories")
+    // Revalidar páginas para refletir mudanças
+    revalidatePath("/admin/categories")
+    revalidatePath("/categories")
+  } catch (error) {
+    console.error(`Error deleting category ${id}:`, error)
+    throw new Error("Failed to delete category")
+  }
 }
 
 // Save banner (create or update)
 export async function saveBanner(bannerData: any): Promise<void> {
-  // In a real app, this would save to a database
-  console.log("Saving banner:", bannerData)
+  try {
+    const { id, ...data } = bannerData
 
-  // Simulate a delay to mimic database operation
-  await new Promise((resolve) => setTimeout(resolve, 1000))
+    if (id) {
+      // Atualizar banner existente
+      await prisma.banner.update({
+        where: { id },
+        data,
+      })
+    } else {
+      // Criar novo banner
+      await prisma.banner.create({
+        data,
+      })
+    }
 
-  // Revalidate the banners page to reflect changes
-  revalidatePath("/admin/banners")
-  revalidatePath("/")
+    // Revalidar páginas para refletir mudanças
+    revalidatePath("/admin/banners")
+    revalidatePath("/")
+  } catch (error) {
+    console.error("Error saving banner:", error)
+    throw new Error("Failed to save banner")
+  }
 }
 
 // Delete banner
 export async function deleteBanner(id: string): Promise<void> {
-  // In a real app, this would delete from a database
-  console.log("Deleting banner:", id)
+  try {
+    await prisma.banner.delete({
+      where: { id },
+    })
 
-  // Simulate a delay to mimic database operation
-  await new Promise((resolve) => setTimeout(resolve, 1000))
-
-  // Revalidate the banners page to reflect changes
-  revalidatePath("/admin/banners")
-  revalidatePath("/")
+    // Revalidar páginas para refletir mudanças
+    revalidatePath("/admin/banners")
+    revalidatePath("/")
+  } catch (error) {
+    console.error(`Error deleting banner ${id}:`, error)
+    throw new Error("Failed to delete banner")
+  }
 }
 

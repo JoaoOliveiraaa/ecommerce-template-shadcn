@@ -1,29 +1,20 @@
 import type React from "react"
 import type { Metadata } from "next"
 import Link from "next/link"
-import { redirect } from "next/navigation"
 import { LayoutDashboard, ShoppingBag, Tag, ImageIcon, Settings, Users, LogOut } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
-import { checkAdminAuth } from "@/lib/auth"
 
 export const metadata: Metadata = {
   title: "Admin Dashboard - MINISHOP",
   description: "Admin dashboard for MINISHOP e-commerce platform",
 }
 
-export default async function AdminLayout({
+export default function AdminLayout({
   children,
 }: {
   children: React.ReactNode
 }) {
-  // Verificar se o usuário está autenticado como administrador
-  const isAuthenticated = await checkAdminAuth()
-
-  if (!isAuthenticated) {
-    redirect("/admin/login")
-  }
-
   return (
     <div className="flex min-h-screen flex-col">
       <header className="sticky top-0 z-40 border-b bg-background">

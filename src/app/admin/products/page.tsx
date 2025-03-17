@@ -1,29 +1,24 @@
 import Link from "next/link"
-import { PlusCircle } from "lucide-react"
 import { Button } from "@/components/ui/button"
-import { Separator } from "@/components/ui/separator"
-import { ProductsTable } from "@/components/admin/products-table"
-import { getProducts } from "@/lib/admin-data"
+import { Plus } from "lucide-react"
 
 export default async function ProductsPage() {
-  const products = await getProducts()
-
   return (
-    <div className="space-y-6">
+    <div className="flex-1 space-y-4 p-4 md:p-8 pt-6">
       <div className="flex items-center justify-between">
-        <div>
-          <h3 className="text-lg font-medium">Products</h3>
-          <p className="text-sm text-muted-foreground">Manage your product inventory, prices, and details.</p>
-        </div>
+        <h2 className="text-3xl font-bold tracking-tight">Products</h2>
         <Button asChild>
           <Link href="/admin/products/new">
-            <PlusCircle className="mr-2 h-4 w-4" />
+            <Plus className="mr-2 h-4 w-4" />
             Add Product
           </Link>
         </Button>
       </div>
-      <Separator />
-      <ProductsTable products={products} />
+      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+        <div className="col-span-full text-center">
+          <p className="text-muted-foreground">No products found. Add your first product!</p>
+        </div>
+      </div>
     </div>
   )
 }

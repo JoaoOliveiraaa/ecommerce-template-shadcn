@@ -1,29 +1,24 @@
 import Link from "next/link"
-import { PlusCircle } from "lucide-react"
 import { Button } from "@/components/ui/button"
-import { Separator } from "@/components/ui/separator"
-import { BannersTable } from "@/components/admin/banners-table"
-import { getBanners } from "@/lib/admin-data"
+import { Plus } from "lucide-react"
 
 export default async function BannersPage() {
-  const banners = await getBanners()
-
   return (
-    <div className="space-y-6">
+    <div className="flex-1 space-y-4 p-4 md:p-8 pt-6">
       <div className="flex items-center justify-between">
-        <div>
-          <h3 className="text-lg font-medium">Banners</h3>
-          <p className="text-sm text-muted-foreground">Manage promotional banners and hero sections.</p>
-        </div>
+        <h2 className="text-3xl font-bold tracking-tight">Banners</h2>
         <Button asChild>
           <Link href="/admin/banners/new">
-            <PlusCircle className="mr-2 h-4 w-4" />
+            <Plus className="mr-2 h-4 w-4" />
             Add Banner
           </Link>
         </Button>
       </div>
-      <Separator />
-      <BannersTable banners={banners} />
+      <div className="grid gap-4 md:grid-cols-2">
+        <div className="col-span-full text-center">
+          <p className="text-muted-foreground">No banners found. Add your first banner!</p>
+        </div>
+      </div>
     </div>
   )
 }

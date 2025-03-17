@@ -1,29 +1,24 @@
 import Link from "next/link"
-import { PlusCircle } from "lucide-react"
 import { Button } from "@/components/ui/button"
-import { Separator } from "@/components/ui/separator"
-import { CategoriesTable } from "@/components/admin/categories-table"
-import { getCategories } from "@/lib/admin-data"
+import { Plus } from "lucide-react"
 
 export default async function CategoriesPage() {
-  const categories = await getCategories()
-
   return (
-    <div className="space-y-6">
+    <div className="flex-1 space-y-4 p-4 md:p-8 pt-6">
       <div className="flex items-center justify-between">
-        <div>
-          <h3 className="text-lg font-medium">Categories</h3>
-          <p className="text-sm text-muted-foreground">Manage product categories and collections.</p>
-        </div>
+        <h2 className="text-3xl font-bold tracking-tight">Categories</h2>
         <Button asChild>
           <Link href="/admin/categories/new">
-            <PlusCircle className="mr-2 h-4 w-4" />
+            <Plus className="mr-2 h-4 w-4" />
             Add Category
           </Link>
         </Button>
       </div>
-      <Separator />
-      <CategoriesTable categories={categories} />
+      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+        <div className="col-span-full text-center">
+          <p className="text-muted-foreground">No categories found. Add your first category!</p>
+        </div>
+      </div>
     </div>
   )
 }

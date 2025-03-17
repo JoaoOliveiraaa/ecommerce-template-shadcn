@@ -9,6 +9,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { loginAdmin } from "@/lib/auth"
+import Cookies from "js-cookie"
 
 export default function AdminLoginPage() {
   const router = useRouter()
@@ -17,15 +18,19 @@ export default function AdminLoginPage() {
   const [error, setError] = useState("")
   const [isLoading, setIsLoading] = useState(false)
 
-  // Atualizar a função de login para lidar corretamente com a resposta assíncrona
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setIsLoading(true)
     setError("")
 
     try {
-      const success = await loginAdmin(email, password)
-      if (success) {
+      const result = await loginAdmin(email, password)
+
+      if (result.success && result.token) {
+        // Definir o cookie no lado do cliente
+        Cookies.set("admin_token", result.token, { expires: 1, path: "/" }) // Expira em 1 dia
+
+        // Redirecionar para o dashboard
         router.push("/admin")
       } else {
         setError("Email ou senha inválidos")
